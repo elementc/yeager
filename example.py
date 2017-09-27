@@ -1,5 +1,5 @@
 from yeager.annotations import state_transition
-from yeager import enumerate_transitions, walk
+from yeager import enumerate_transitions, walk, reachable_states, orphaned_states
 
 @state_transition(None, "login-page")
 def launch_app():
@@ -45,7 +45,30 @@ def new_map():
 def log_out():
     print("logging out...")
 
+@state_transition("mab-editor", "home-page")
+def misspelled_logout():
+    print("This will never run because 'mab-editor' is an orphaned state.")
+
 
 if __name__ == "__main__":
+    # debug function to dump the entire state graph to the console
     enumerate_transitions()
-    walk(100)
+
+    # debug function returns a list of all states reachable in the graph (BFS).
+    print("from the default state of None, reachable states:")
+    for state in reachable_states():
+        print("\t%s" % state)
+
+    # debug function returns a list of all states NOT reachable in the graph (reachable_states -> set subtraction)
+    print("from the default state of None, unreachable states:")
+    for state in orphaned_states():
+        print("\t%s" % state)
+
+    # reachable_states, orphaned_states, and walk take an optional arg (default None) to define "starting state"
+    # overridable like this:
+    print("from the custom state of mab-editor, reachable states:")
+    for state in reachable_states("mab-editor"):
+        print("\t%s" % state)
+
+    # utility function to walk on the graph:
+    walk(10)
