@@ -1,6 +1,5 @@
 from collections import defaultdict
 from functools import wraps
-from time import sleep
 
 nodes = set()
 edges = defaultdict(list)
@@ -29,12 +28,10 @@ def state_transition(state_from, state_to):
             states_to = state_to
         for s_frm in states_from:
             for s_to in states_to:
-                print("establishing %s as a transition from %s to %s" % (str(func), str(s_frm), str(s_to)),)
+                # print("establishing %s as a transition from %s to %s" % (str(func), str(s_frm), str(s_to)),)
                 @wraps(func)
                 def transition_function(*args, **kwargs):
-                    sleep(0.5)
                     print("executing function %s, %s -> %s" % (str(func), str(s_frm), str(s_to)))
-                    sleep(0.5)
                     return func(*args, **kwargs)
                 add_node(s_frm)
                 add_node(s_to)
