@@ -11,6 +11,7 @@ def walk(count, current_state=None):
     for i in range(count):
         trans = choice(edges[current_state])
         current_state = trans[0]
+        # print("current state becomes %s" % current_state)
         trans[1]()
 
 def reachable_states(start=None):
