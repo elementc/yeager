@@ -7,11 +7,11 @@ def enumerate_transitions():
         for transition in edges[key]:
             print("\t state %s can be reached by function %s" % (transition[0], str(transition[1])))
 
-def walk(count, current_state=None):
+def walk(count, current_state=None, **kwargs):
     for i in range(count):
         trans = choice(edges[current_state])
         current_state = trans[0]
-        trans[1]()
+        trans[1](**kwargs)
 
 def reachable_states(start=None):
     can_reach = set([start])

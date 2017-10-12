@@ -1,52 +1,56 @@
 from yeager.annotations import state_transition
 from yeager import enumerate_transitions, walk, reachable_states, orphaned_states
+from selenium import webdriver
 
 @state_transition(None, "login-page")
-def launch_app():
+def launch_app(test=None):
     print("launching application...")
+    test.get("https://chrome.google.com")
 
 @state_transition("login-page", "home-page")
-def log_in():
+def log_in(test=None):
     print("logging in...")
+    test.get("https://www.mozilla.org/en-US/firefox/")
 
 @state_transition("home-page", "settings-page")
-def open_settings():
+def open_settings(test=None):
     print("opening the settings page...")
 
 @state_transition("settings-page", "home-page")
-def save_settings():
+def save_settings(test=None):
     print("saving settings...")
 
 @state_transition("home-page", "map-editor")
-def load_map():
+def load_map(test=None):
     print("loading a map...")
 
 @state_transition("map-editor", "map-editor")
-def draw_on_map():
+def draw_on_map(test=None):
     print("drawing on the map...")
 
 @state_transition("map-editor", "map-editor")
-def save_map():
+def save_map(test=None):
     print("saving the map...")
 
 @state_transition("map-editor","home-page")
-def close_map():
+def close_map(test=None):
     print("closing the map...")
 
 @state_transition("map-editor", "map-editor")
-def export_map():
+def export_map(test=None):
     print("exporting the map...")
 
 @state_transition("home-page", "map-editor")
-def new_map():
+def new_map(test=None):
     print("creating new map...")
 
 @state_transition(["map-editor", "home-page", "settings-page"], "login-page")
-def log_out():
+def log_out(test=None):
+    test.get("https://chrome.google.com")
     print("logging out...")
 
 @state_transition("mab-editor", "home-page")
-def misspelled_logout():
+def misspelled_logout(test=None):
     print("This will never run because 'mab-editor' is an orphaned state.")
 
 
@@ -71,4 +75,4 @@ if __name__ == "__main__":
         print("\t%s" % state)
 
     # utility function to walk on the graph:
-    walk(10)
+    walk(10, test=webdriver.Chrome())
