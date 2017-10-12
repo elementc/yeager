@@ -31,7 +31,7 @@ def state_transition(state_from, state_to):
                 # print("establishing %s as a transition from %s to %s" % (str(func), str(s_frm), str(s_to)),)
                 @wraps(func)
                 def transition_function(*args, **kwargs):
-                    print("executing function %s, %s -> %s" % (str(func), str(s_frm), str(s_to)))
+                    print("executing function %s, current state -> %s" % (str(func), str(s_to)))
                     return func(*args, **kwargs)
                 add_node(s_frm)
                 add_node(s_to)
