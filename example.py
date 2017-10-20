@@ -1,57 +1,61 @@
 from yeager.annotations import state_transition
 from yeager import enumerate_transitions, walk, reachable_states, orphaned_states
-from selenium import webdriver
+from collections import defaultdict
 
 @state_transition(None, "login-page")
-def launch_app(test=None):
+def launch_app(arg):
     print("launching application...")
-    test.get("https://chrome.google.com")
 
 @state_transition("login-page", "home-page")
-def log_in(test=None):
+def log_in(arg):
     print("logging in...")
-    test.get("https://www.mozilla.org/en-US/firefox/")
 
 @state_transition("home-page", "settings-page")
-def open_settings(test=None):
+def open_settings(arg):
     print("opening the settings page...")
 
 @state_transition("settings-page", "home-page")
-def save_settings(test=None):
+def save_settings(arg):
     print("saving settings...")
 
 @state_transition("home-page", "map-editor")
-def load_map(test=None):
+def load_map(arg):
     print("loading a map...")
 
 @state_transition("map-editor", "map-editor")
-def draw_on_map(test=None):
+def draw_on_map(arg):
     print("drawing on the map...")
 
 @state_transition("map-editor", "map-editor")
-def save_map(test=None):
+def save_map(arg):
     print("saving the map...")
 
 @state_transition("map-editor","home-page")
-def close_map(test=None):
+def close_map(arg):
     print("closing the map...")
 
 @state_transition("map-editor", "map-editor")
-def export_map(test=None):
+def export_map(arg):
+    arg["exports"].append("exported a map")
     print("exporting the map...")
 
 @state_transition("home-page", "map-editor")
-def new_map(test=None):
+def new_map(arg):
+    arg["maps"].append("created a new map")
     print("creating new map...")
 
 @state_transition(["map-editor", "home-page", "settings-page"], "login-page")
-def log_out(test=None):
-    test.get("https://chrome.google.com")
+def log_out(arg):
     print("logging out...")
+    raise Exception("buggy code")
 
 @state_transition("mab-editor", "home-page")
-def misspelled_logout(test=None):
+def misspelled_logout(arg):
     print("This will never run because 'mab-editor' is an orphaned state.")
+
+@state_transition("login-page", None)
+def quti(arg):
+    print("quitting the application")
 
 
 if __name__ == "__main__":
@@ -75,4 +79,6 @@ if __name__ == "__main__":
         print("\t%s" % state)
 
     # utility function to walk on the graph:
-    walk(10, test=webdriver.Chrome())
+    dic = defaultdict(list)
+    walk(25, arg=dic )
+    print(dic)
