@@ -79,4 +79,4 @@ def orphaned_states(start=None):
             orphaned_states.append(state)
     return orphaned_states
 
-__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight]
+__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight, add_state_to_blacklist]
