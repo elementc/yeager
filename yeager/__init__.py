@@ -1,11 +1,28 @@
-from .annotations import edges
+from .annotations import edges, edge_weights, set_edge_weight, filter_node_id
 from random import choice
+
+state_blacklist = set()
+
+def add_state_to_blacklist(state):
+    state_blacklist.add(filter_node_id(state))
+
+def calculate_choices(edge_options):
+    weighted_choices = []
+    for edge in edge_options:
+        # obey blacklist
+        if edge[0] in state_blacklist:
+            continue
+        else:
+            # obey weights
+            for i in range(edge_weights[edge[1]]):
+                weighted_choices.append(edge)
+    return weighted_choices
 
 def enumerate_transitions():
     for key in edges:
         print("with regard to state %s, " % str(key))
         for transition in edges[key]:
-            print("\t state %s can be reached by function %s" % (transition[0], str(transition[1])))
+            print("\t state %s can be reached by function %s (weight %d)%s" % (transition[0], str(transition[1]), edge_weights[transition[1]], " (BLACKLISTED)" if transition[0] in state_blacklist else "") )
 
 class ExitStateReachedException(Exception):
     pass
@@ -20,9 +37,10 @@ def walk(count=None, exit_state=_YeagerDefaultExitState_, start_state=None, **kw
     current_state = start_state
     def step():
         nonlocal current_state
-        if len(edges[current_state]) == 0:
+        weighted_choices = calculate_choices(edges[current_state])
+        if len(weighted_choices) == 0:
             raise NoStatesToStepToException("There are no states that yeager knows how to transition to from state %s." % current_state)
-        trans = choice(edges[current_state])
+        trans = choice(weighted_choices)
         current_state = trans[0]
         trans[1](**kwargs)
         if current_state is exit_state:
@@ -61,4 +79,4 @@ def orphaned_states(start=None):
             orphaned_states.append(state)
     return orphaned_states
 
-__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException]
+__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight]

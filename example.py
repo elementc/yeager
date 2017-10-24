@@ -1,5 +1,5 @@
 from yeager.annotations import state_transition
-from yeager import enumerate_transitions, walk, reachable_states, orphaned_states
+from yeager import enumerate_transitions, walk, reachable_states, orphaned_states, add_state_to_blacklist
 from collections import defaultdict
 
 @state_transition(None, "login-page")
@@ -22,7 +22,7 @@ def save_settings(arg):
 def load_map(arg):
     print("loading a map...")
 
-@state_transition("map-editor", "map-editor")
+@state_transition("map-editor", "map-editor", weight=15)
 def draw_on_map(arg):
     print("drawing on the map...")
 
@@ -47,7 +47,7 @@ def new_map(arg):
 @state_transition(["map-editor", "home-page", "settings-page"], "login-page")
 def log_out(arg):
     print("logging out...")
-    raise Exception("buggy code")
+    # raise Exception("buggy code")
 
 @state_transition("mab-editor", "home-page")
 def misspelled_logout(arg):
@@ -60,25 +60,25 @@ def quti(arg):
 
 if __name__ == "__main__":
     # debug function to dump the entire state graph to the console
-    enumerate_transitions()
+    add_state_to_blacklist("settings-page")
+    # enumerate_transitions()
 
     # debug function returns a list of all states reachable in the graph (BFS).
-    print("from the default state of None, reachable states:")
-    for state in reachable_states():
-        print("\t%s" % state)
-
-    # debug function returns a list of all states NOT reachable in the graph (reachable_states -> set subtraction)
-    print("from the default state of None, unreachable states:")
-    for state in orphaned_states():
-        print("\t%s" % state)
-
-    # reachable_states, orphaned_states, and walk take an optional arg (default None) to define "starting state"
-    # overridable like this:
-    print("from the custom state of mab-editor, reachable states:")
-    for state in reachable_states("mab-editor"):
-        print("\t%s" % state)
+    # print("from the default state of None, reachable states:")
+    # for state in reachable_states():
+    #     print("\t%s" % state)
+    #
+    # # debug function returns a list of all states NOT reachable in the graph (reachable_states -> set subtraction)
+    # print("from the default state of None, unreachable states:")
+    # for state in orphaned_states():
+    #     print("\t%s" % state)
+    #
+    # # reachable_states, orphaned_states, and walk take an optional arg (default None) to define "starting state"
+    # # overridable like this:
+    # print("from the custom state of mab-editor, reachable states:")
+    # for state in reachable_states("mab-editor"):
+    #     print("\t%s" % state)
 
     # utility function to walk on the graph:
     dic = defaultdict(list)
-    walk(25, arg=dic )
-    print(dic)
+    walk(25, arg=dic)

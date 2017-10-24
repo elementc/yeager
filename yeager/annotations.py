@@ -3,6 +3,10 @@ from functools import wraps
 
 nodes = set()
 edges = defaultdict(list)
+edge_weights = defaultdict(lambda: 1)
+
+def set_edge_weight(edge, weight):
+    edge_weights[edge] = int(weight)
 
 def filter_node_id(name):
     if isinstance(name, str):
@@ -16,7 +20,7 @@ def add_node(name):
 def add_edge(node_from, node_to, traversal_method):
     edges[filter_node_id(node_from)].append((filter_node_id(node_to), traversal_method),)
 
-def state_transition(state_from, state_to):
+def state_transition(state_from, state_to, weight=None):
     def decorator(func):
         if not isinstance(state_from, list):
             states_from = [state_from,]
@@ -28,7 +32,6 @@ def state_transition(state_from, state_to):
             states_to = state_to
         for s_frm in states_from:
             for s_to in states_to:
-                # print("establishing %s as a transition from %s to %s" % (str(func), str(s_frm), str(s_to)),)
                 @wraps(func)
                 def transition_function(*args, **kwargs):
                     print("executing function %s, current state -> %s" % (str(func), str(s_to)))
@@ -36,5 +39,7 @@ def state_transition(state_from, state_to):
                 add_node(s_frm)
                 add_node(s_to)
                 add_edge(s_frm, s_to, transition_function)
+                if weight:
+                    set_edge_weight(transition_function, weight)
         return func
     return decorator
