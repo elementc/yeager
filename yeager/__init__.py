@@ -1,4 +1,4 @@
-from .annotations import edges, edge_weights, set_edge_weight, filter_node_id
+from .annotations import edges, edge_weights, set_edge_weight, filter_node_id, state_transition
 from random import choice
 
 state_blacklist = set()
@@ -79,4 +79,4 @@ def orphaned_states(start=None):
             orphaned_states.append(state)
     return orphaned_states
 
-__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight, add_state_to_blacklist]
+__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight, add_state_to_blacklist, state_transition]
