@@ -1,5 +1,5 @@
 from yeager.annotations import state_transition
-from yeager import enumerate_transitions, walk, reachable_states, orphaned_states, add_state_to_blacklist
+from yeager import enumerate_transitions, walk, reachable_states, orphaned_states, add_state_to_blacklist, remove_state_from_blacklist, add_transition_to_blacklist, remove_transition_from_blacklist, trans_blacklist, state_blacklist
 from collections import defaultdict
 
 @state_transition(None, "login-page")
@@ -60,8 +60,8 @@ def quti(arg):
 
 if __name__ == "__main__":
     # debug function to dump the entire state graph to the console
-    add_state_to_blacklist("settings-page")
-    # enumerate_transitions()
+    # add_state_to_blacklist("settings-page")
+    #enumerate_transitions()
 
     # debug function returns a list of all states reachable in the graph (BFS).
     # print("from the default state of None, reachable states:")
@@ -81,4 +81,15 @@ if __name__ == "__main__":
 
     # utility function to walk on the graph:
     dic = defaultdict(list)
-    walk(25, arg=dic)
+    #walk(5, arg=dic)
+    #print(dic)
+    add_transition_to_blacklist(log_in)
+    print("blacklisting log_in")
+    print(trans_blacklist)
+    print(log_in)
+    walk(5, arg=dic)
+    # remove_transition_from_blacklist(log_in)
+    # add_state_to_blacklist("home-page")
+    # print("blacklisting home-page")
+    # print(state_blacklist)
+    # walk(5, arg=dic)

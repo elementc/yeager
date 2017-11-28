@@ -18,14 +18,11 @@ def remove_transition_from_blacklist(transition):
 
 def calculate_choices(edge_options):
     weighted_choices = []
-    print("BLACKLIST:", state_blacklist, trans_blacklist)
     for edge in edge_options:
-        # obey blacklist
+        # obey blacklists
         if edge[0] in state_blacklist or edge[1] in trans_blacklist:
-            print("BLACKLISTED: ", edge)
             continue
         else:
-            print(edge[1])
             # obey weights
             for i in range(edge_weights[edge[1]]):
                 weighted_choices.append(edge)

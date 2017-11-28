@@ -34,12 +34,12 @@ def state_transition(state_from, state_to, weight=None):
             for s_to in states_to:
                 @wraps(func)
                 def transition_function(*args, **kwargs):
-                    print("executing function %s, current state -> %s" % (str(func), str(s_to)))
+                    print("executing %s, current state -> %s" % (str(func), str(s_to)))
                     return func(*args, **kwargs)
                 add_node(s_frm)
                 add_node(s_to)
                 add_edge(s_frm, s_to, transition_function)
                 if weight:
                     set_edge_weight(transition_function, weight)
-        return func
+        return transition_function
     return decorator
