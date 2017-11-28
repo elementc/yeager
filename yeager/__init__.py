@@ -11,10 +11,12 @@ def add_transition_to_blacklist(transition):
     trans_blacklist.add(transition)
 
 def remove_state_from_blacklist(state):
-    state_blacklist.remove(filter_node_id(state))
+    if state in state_blacklist:
+        state_blacklist.remove(filter_node_id(state))
 
 def remove_transition_from_blacklist(transition):
-    trans_blacklist.remove(transition)
+    if transition in trans_blacklist:
+        trans_blacklist.remove(transition)
 
 def calculate_choices(edge_options):
     weighted_choices = []
@@ -60,7 +62,7 @@ def walk(count=None, exit_state=_YeagerDefaultExitState_, start_state=None, **kw
         trans = choice(weighted_choices)
         current_state = trans[0]
         trans[1](**kwargs)
-        if current_state is exit_state:
+        if current_state == exit_state:
             raise ExitStateReachedException(current_state)
 
     if count:
