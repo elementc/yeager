@@ -1,18 +1,31 @@
-from .annotations import edges, edge_weights, set_edge_weight, filter_node_id, state_transition
+from .annotations import nodes, edges, edge_weights, set_edge_weight, filter_node_id, state_transition
 from random import choice
 
 state_blacklist = set()
+trans_blacklist = set()
 
 def add_state_to_blacklist(state):
     state_blacklist.add(filter_node_id(state))
 
+def add_transition_to_blacklist(transition):
+    trans_blacklist.add(transition)
+
+def remove_state_from_blacklist(state):
+    state_blacklist.remove(filter_node_id(state))
+
+def remove_transition_from_blacklist(transition):
+    trans_blacklist.remove(transition)
+
 def calculate_choices(edge_options):
     weighted_choices = []
+    print("BLACKLIST:", state_blacklist, trans_blacklist)
     for edge in edge_options:
         # obey blacklist
-        if edge[0] in state_blacklist:
+        if edge[0] in state_blacklist or edge[1] in trans_blacklist:
+            print("BLACKLISTED: ", edge)
             continue
         else:
+            print(edge[1])
             # obey weights
             for i in range(edge_weights[edge[1]]):
                 weighted_choices.append(edge)
@@ -22,7 +35,14 @@ def enumerate_transitions():
     for key in edges:
         print("with regard to state %s, " % str(key))
         for transition in edges[key]:
-            print("\t state %s can be reached by function %s (weight %d)%s" % (transition[0], str(transition[1]), edge_weights[transition[1]], " (BLACKLISTED)" if transition[0] in state_blacklist else "") )
+            print("\t state %s can be reached by function %s (weight %d)%s" %
+                (transition[0], str(transition[1]),
+                edge_weights[transition[1]],
+                " (BLACKLISTED)" if
+                transition[0] in state_blacklist or
+                transition[1] in trans_blacklist
+                else "")
+            )
 
 class ExitStateReachedException(Exception):
     pass
@@ -79,4 +99,4 @@ def orphaned_states(start=None):
             orphaned_states.append(state)
     return orphaned_states
 
-__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight, add_state_to_blacklist, state_transition]
+__all__=[enumerate_transitions, walk, reachable_states, orphaned_states, NoStatesToStepToException, set_edge_weight, add_state_to_blacklist, add_transition_to_blacklist, remove_state_from_blacklist, remove_transition_from_blacklist, state_transition, nodes, edges]
