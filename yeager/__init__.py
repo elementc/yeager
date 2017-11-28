@@ -50,7 +50,7 @@ class ExitStateReachedException(Exception):
 class NoStatesToStepToException(Exception):
     pass
 
-class _YeagerDefaultExitState_: # users must explicitly set the exit state to None in order to trigger exit state options...
+class _YeagerDefaultExitState_: # users must explicitly set the exit state in order to trigger exit state options...
     pass
 
 def walk(count=None, exit_state=_YeagerDefaultExitState_, start_state=None, **kwargs):
