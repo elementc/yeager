@@ -81,13 +81,8 @@ if __name__ == "__main__":
 
     # utility function to walk on the graph:
     dic = defaultdict(list)
-    #walk(5, arg=dic)
-    #print(dic)
-    add_transition_to_blacklist(log_in)
-    print("blacklisting log_in")
-    print(trans_blacklist)
-    print(log_in)
-    walk(5, arg=dic)
+    walk(150, arg=dic)
+    print(dic)
     # remove_transition_from_blacklist(log_in)
     # add_state_to_blacklist("home-page")
     # print("blacklisting home-page")
